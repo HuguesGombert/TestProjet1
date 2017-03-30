@@ -1,0 +1,294 @@
+<?php
+	 //-----------------------------------------------------------------------
+ 	 // Remplace cal_days_in_month
+ 	 // me donne le nombre de jours du mois
+ 	 //-----------------------------------------------------------------------
+	 function nombreDeJoursDuMois ($LeMois,$lAnnee)
+	{
+		$leJour=25;
+		$OKoupas = checkdate($LeMois,$leJour,$lAnnee) or die ("erreur sur checkdate");
+		while ( $OKoupas!= false)
+		{
+			$leJour++;
+			$OKoupas = checkdate($LeMois,$leJour,$lAnnee);
+		}
+		$leJour--;
+		return $leJour;
+	}
+	//-----------------------------------------------------------------------
+	// Me donne la date du jour au format Francais
+	//-----------------------------------------------------------------------
+	 function dateduJour ()
+	{
+		$aujourdhui=getdate();
+		$mois=$aujourdhui['mon'];
+		$Jour=$aujourdhui['mday'];
+		$Annee=$aujourdhui['year'];
+		$laDate=$Annee."-".$mois."-".$Jour;
+		//$laDate="2003-12-01";
+		return $laDate;
+	}
+	//-----------------------------------------------------------------------
+	// Me donne la date du jour au format Francais
+	//-----------------------------------------------------------------------
+	function GetCurrentMonthName()
+	{
+		$aujourdhui=getdate();
+		$moisencours=(int)$aujourdhui['mon'];
+		$Noms_des_mois = array (' ','Janvier','Fevrier','Mars','Avril','Mai','Juin','Juillet','Aout','Septembre','Octobre','Novembre','Decembre');
+		return $Noms_des_mois[$moisencours];
+	}
+	//-----------------------------------------------------------------------
+	// Me donne l'annee en cours
+	//-----------------------------------------------------------------------
+	 function GetCurrentYear ()
+	{
+		$aujourdhui=getdate();
+		return $aujourdhui['year'];
+	}
+	//-----------------------------------------------------------------------
+	// Me donne le mois en cours
+	//-----------------------------------------------------------------------
+	 function GetCurrentMonth ()
+	{
+		$aujourdhui=getdate();
+		return (int)$aujourdhui['mon'];
+	}
+	//-----------------------------------------------------------------------
+	// Me donne le jour en cours
+	//-----------------------------------------------------------------------
+	 function GetCurrentDay ()
+	{
+		$aujourdhui=getdate();
+		return (int)$aujourdhui['mday'];
+	}
+	//-----------------------------------------------------------------------
+	// Me donne l'heure courante en heure:mins:secondes
+	//-----------------------------------------------------------------------
+	 function HeureCourante ()
+	{
+		$aujourdhui=getdate();
+		$lheure=$aujourdhui['hours'].":".$aujourdhui['minutes'].":".$aujourdhui['seconds'];
+		return $lheure;
+	}
+	//-----------------------------------------------------------------------
+	// Me donne le nom du jour en francais
+	//-----------------------------------------------------------------------
+	 function nomDuJour ($LaDate)
+	{
+		$Noms_des_jours = array ('dim.','lun.','mar.','mer.','jeu.','ven.','sam.');
+		$LesMorceaux=explode('/',$LaDate);
+		$numjour=date("w",mktime(0,0,0,$LesMorceaux[1],$LesMorceaux[0],$LesMorceaux[2]));
+		return $Noms_des_jours[$numjour];
+	}
+	//-----------------------------------------------------------------------
+	// Me donne le N° du jour dans la semaine
+	//-----------------------------------------------------------------------
+	 function numeroDuJour ($LaDate)
+	{
+		list($jourDate,$moisDate,$anneeDate)=explode('/',$LaDate);
+		$numjour=date("w",mktime(0,0,0,$moisDate,$jourDate,$anneeDate));
+		return $numjour;
+	}
+	//-----------------------------------------------------------------------
+	// Retourne le nom du mois
+	//-----------------------------------------------------------------------
+	function nomDuMois ($lemois)
+	{
+		$Noms_des_mois = array (' ','Janvier','Fevrier','Mars','Avril','Mai','Juin','Juillet','Aout','Septembre','Octobre','Novembre','Decembre');
+		return $Noms_des_mois[$lemois];
+	}
+	//-----------------------------------------------------------------------
+	// Retourne le nom du mois court
+	//-----------------------------------------------------------------------
+	function nomDuMoisCourt ($lemois)
+	{
+		$Noms_des_mois = array (' ','Jan.','Fev.','Mar.','Avr.','Mai.','Jui.','Juil.','Aou.','Sep.','Oct.','Nov.','Dec.');
+		return $Noms_des_mois[$lemois];
+	}
+
+	//-----------------------------------------------------------------------
+	// Equivalent à ajouter a date sous 4D
+	//-----------------------------------------------------------------------
+	function ajouterADate_fr ($LaDatefd,$nbJour,$nbMois,$nbAnnee)
+	{
+		list($jourDate,$moisDate,$anneeDate) = explode('/', $LaDatefd);
+		$newDate=date("d/m/Y",mktime(0,0,0,$moisDate+$nbMois,$jourDate+$nbJour,$anneeDate+$nbAnnee));
+		return $newDate;
+	}
+	//-----------------------------------------------------------------------
+	// Equivalent à ajouter a date sous 4D version US
+	//-----------------------------------------------------------------------
+	function AjouterADateUS ($LaDatefd,$nbJour,$nbMois,$nbAnnee)
+	{
+		$LaDateCalcul=$LaDatefd;
+		list($anneeDate, $moisDate, $jourDate) = explode('-', $LaDatefd);
+		$newDate=date("Y-m-d",mktime(0,0,0,$moisDate+$nbMois,$jourDate+$nbJour,$anneeDate+$nbAnnee));
+		return $newDate;
+	}
+
+	//----------------------------------------------------------------------
+	// Convertit une date fr jj/mm/yyyy en yyyy-mm-jj
+	//----------------------------------------------------------------------
+	function convertDatefr2DateUS($laDateFr)
+	{
+		 //Transforme la chaine en tableau avec comme délimiteur /
+		 $laDateFr = explode('/', $laDateFr);
+		 //permute les elment du tableau
+		 $laDateFr = array_reverse($laDateFr);
+		 //transforme la tableau en chaine avec comme séparateur -
+		 $laDateFr = implode('-', $laDateFr);
+		 return $laDateFr;
+	}
+	//----------------------------------------------------------------------
+	// Converti une date US yyyy-mm-jj en jj/mm/yyyy
+	//----------------------------------------------------------------------
+	function convertDateUS2DateFr($laDateUS)
+	{
+		 //Transforme la chaine en tableau avec comme délimiteur /
+		 $laDateUS = explode('-', $laDateUS);
+		 //permute les elment du tableau
+		 $laDateUS = array_reverse($laDateUS);
+		 //transforme la tableau en chaine avec comme séparateur -
+		 $laDateUS = implode('/', $laDateUS);
+		 return $laDateUS;
+	}
+	/**
+	* Fonction retournant le numéro de la semaine en fonction de la date au format français (JJ/MM/AAAA)
+	* @param string $date Date au format français (JJ/MM/AAAA)
+	* @return integer Numéro de semaine
+	*/
+	function numerodesemaine_FR($date)
+	{
+	  list($day, $month, $year) = explode('/', $date);
+	  $weekNum = (date('W', mktime(0, 0, 0, $month, $day, $year)) * 1);
+	  return $weekNum;
+	}
+	//---------------------------------------------------------------------
+	// Retourne le premier jour de la semaine correspondant à la date
+	// passée en paramètre
+	//---------------------------------------------------------------------
+	function getFirstDayOfWeekDate($date)
+	{
+		$numeroDuJour=numeroDuJour($date);
+		switch ($numeroDuJour)
+		{
+			case 6: //Samedi
+				return ajouterADate_fr($date,2,0,0);
+				break;
+			case 0: //Dimanche
+				return ajouterADate_fr($date,1,0,0);
+				break;
+			case 0: //Lundi
+				return $date;
+				break;
+			default: //Les auters jours
+				return ajouterADate_fr($date,-($numeroDuJour-1),0,0);
+		}
+	}
+	//---------------------------------------------------------------------
+	// Retourne le dernier jour de la semaine correspondant à la date
+	// passée en paramètre
+	//---------------------------------------------------------------------
+	function getLastDayOfWeekDate($date)
+	{
+		$numeroDuJour=numeroDuJour($date);
+		if($numeroDuJour>=1){return ajouterADate_fr($date,(5-$numeroDuJour),0,0);}
+		else {return ajouterADate_fr($date,-2,0,0);}
+	}
+	//---------------------------------------------------------------------
+	// Soustrait deux dates passees
+	// retourne le nombre de jours
+	//---------------------------------------------------------------------
+	function SoustraireDates($Date1,$Date2)
+	{
+		list($jourDate,$moisDate,$anneeDate)=explode('/',$Date1);
+		$mktime1=mktime(0,0,0,$moisDate,$jourDate,$anneeDate);
+		list($jourDate,$moisDate,$anneeDate)=explode('/',$Date2);
+		$mktime2=mktime(0,0,0,$moisDate,$jourDate,$anneeDate);
+		$nbJours=round((abs($mktime2-$mktime1)/(24*60*60)),1);
+		return $nbJours;
+	}
+	//---------------------------------------------------------------------
+	// Ajoute ou soustrait des mois
+	// à un mois une année
+	//---------------------------------------------------------------------
+	function AjouterAMois($nbMois,$moisOrigine,$anneeOrigine)
+	{
+		//echo '$nbMois : '.$nbMois.'<br>';
+		$nbMois=(float)$nbMois;
+		//echo '$nbMois : '.$nbMois.'<br>';
+		if($nbMois>0)
+		{
+			//ajout de mois
+			if(($nbMois+$moisOrigine)<=12)
+			{
+				return ($nbMois+$moisOrigine).'/'.$anneeOrigine;
+			}
+			else
+			{
+				$nombreAnneeCalculees=(int)($nbMois/12);
+				$nbMoisAAjouter=$nbMois%12;
+				$AnneeCalculee=$anneeOrigine+$nombreAnneeCalculees;
+				$moisCalcule=$moisOrigine+$nbMoisAAjouter;
+				if($moisCalcule>12)
+				{
+					$moisCalcule=$moisCalcule%12;
+					$AnneeCalculee+=1;
+				}
+				return ($moisCalcule.'/'.$AnneeCalculee);
+			}
+		}
+		else
+		{
+			//Suppression de mois
+			if(($moisOrigine+$nbMois)>=1)
+			{
+				return ($moisOrigine+$nbMois).'/'.$anneeOrigine;
+			}
+			else
+			{
+				$nombreAnneeCalculees=(int)(abs($nbMois)/12);
+				$nbMoisASoustraire=abs($nbMois)%12;
+				$AnneeCalculee=$anneeOrigine-$nombreAnneeCalculees;
+				$moisCalcule=$moisOrigine-$nbMoisASoustraire;
+				if($moisCalcule<1)
+				{
+					$moisCalcule=12+$moisCalcule;
+					$AnneeCalculee-=1;
+				}
+				return ($moisCalcule.'/'.$AnneeCalculee);
+			}
+		}
+	}
+	//
+	//     Génère une UUID
+	function getGUUID()
+	{
+	    if (function_exists('com_create_guid')){
+	        return com_create_guid();
+	    }else{
+	        mt_srand((double)microtime()*10000);//optional for php 4.2.0 and up.
+	        $charid = strtoupper(md5(uniqid(rand(), true)));
+	        $hyphen = chr(45);// "-"
+	        //$uuid = //chr(123)// "{"
+	        $uuid = substr($charid, 0, 8).$hyphen
+	            .substr($charid, 8, 4).$hyphen
+	            .substr($charid,12, 4).$hyphen
+	            .substr($charid,16, 4).$hyphen
+	            .substr($charid,20,12);
+	            //.chr(125);// "}"
+	        return $uuid;
+	    }
+	}
+	//   get time stamp
+	function TimeStamp_Get()
+	{
+		$nbjoursDepuisOrigine=SoustraireDates(convertDateUS2DateFr(dateduJour ()),'01/09/2009');
+		$nbsecondes=(int)$nbjoursDepuisOrigine*86400;
+		$date=getdate();
+		$nbSecondejours=((int)$date['hours']*3600)+((int)$date['minutes']*60)+((int)$date['seconds']);
+		return $nbsecondes+$nbSecondejours;
+
+	}
+?>
